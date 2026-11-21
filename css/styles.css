@@ -103,6 +103,14 @@ body::before {
 .brand-subtitle {
   font-size: 0.78rem;
   color: var(--text-muted);
+  text-decoration: none;
+  width: fit-content;
+}
+
+.brand-subtitle:hover,
+.brand-subtitle:focus-visible {
+  color: var(--accent);
+  text-decoration: underline;
 }
 
 /* ==========================================================================
