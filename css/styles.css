@@ -63,7 +63,7 @@ body::before {
    ========================================================================== */
 .site-header {
   background:
-    linear-gradient(90deg, #ffffff 0%, #fafbf6 100%);
+    linear-gradient(90deg, #f5f7ed 0%, #ffffff 55%, #f3efd9 100%);
   border-bottom: 1px solid rgba(58, 45, 25, 0.22);
   padding: 0.95rem 0;
   box-shadow: 0 4px 18px rgba(58, 45, 25, 0.12);
@@ -87,6 +87,12 @@ body::before {
   height: 52px;
   width: auto;
   object-fit: contain;
+  transition: transform 0.2s ease;
+}
+
+.brand a:hover .logo-si,
+.brand a:focus-visible .logo-si {
+  transform: translateY(-1px);
 }
 
 .brand-text {
