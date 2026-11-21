@@ -62,10 +62,11 @@ body::before {
    Header
    ========================================================================== */
 .site-header {
-  background-color: var(--bg-card);
-  border-bottom: 1px solid rgba(58, 45, 25, 0.18);
-  padding: 0.9rem 0;
-  box-shadow: 0 4px 16px rgba(58, 45, 25, 0.1);
+  background:
+    linear-gradient(90deg, #f4f6ea 0%, #ffffff 48%, #f8f5ed 100%);
+  border-bottom: 3px solid var(--primary);
+  padding: 0.72rem 0;
+  box-shadow: 0 5px 18px rgba(58, 45, 25, 0.12);
   position: relative;
   z-index: 20;
 }
@@ -79,11 +80,23 @@ body::before {
 .brand {
   display: flex;
   align-items: center;
-  gap: 0.9rem;
+  gap: 0.85rem;
+  min-width: 0;
+}
+
+.brand > a {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 0.32rem 0.48rem;
+  border: 1px solid rgba(58, 45, 25, 0.12);
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(58, 45, 25, 0.08);
 }
 
 .logo-si {
-  height: 52px;
+  height: 48px;
   width: auto;
   object-fit: contain;
   transition: transform 0.2s ease;
@@ -97,18 +110,32 @@ body::before {
 .brand-text {
   display: flex;
   flex-direction: column;
+  line-height: 1.2;
+}
+
+.brand-eyebrow {
+  margin-bottom: 0.16rem;
+  color: #7d704f;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .brand-title {
   font-weight: 800;
-  font-size: 1.16rem;
+  font-size: 1.12rem;
   color: var(--primary);
   letter-spacing: -0.02em;
 }
 
+.brand-title strong {
+  color: var(--accent);
+}
+
 .brand-subtitle {
-  margin-top: 0.08rem;
-  font-size: 0.82rem;
+  margin-top: 0.14rem;
+  font-size: 0.78rem;
   color: #5f5444;
   font-weight: 600;
   text-decoration: none;
@@ -119,6 +146,35 @@ body::before {
 .brand-subtitle:focus-visible {
   color: var(--accent);
   text-decoration: underline;
+}
+
+.header-context {
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  gap: 0.55rem;
+  flex-shrink: 0;
+  margin-left: 1rem;
+  padding-left: 1rem;
+  border-left: 3px solid var(--accent);
+  color: var(--primary);
+}
+
+.header-context-label {
+  font-size: 0.92rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.header-context-period {
+  padding: 0.32rem 0.48rem;
+  border: 1px solid rgba(58, 45, 25, 0.16);
+  border-radius: 999px;
+  background: rgba(195, 210, 151, 0.28);
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  font-weight: 800;
+  white-space: nowrap;
 }
 
 /* ==========================================================================
@@ -710,6 +766,18 @@ body::before {
 }
 
 @media (max-width: 639px) {
+  .header-context {
+    display: none;
+  }
+
+  .brand {
+    gap: 0.65rem;
+  }
+
+  .brand-eyebrow {
+    font-size: 0.62rem;
+  }
+
   .team-bubbles {
     grid-template-columns: 1fr;
   }
