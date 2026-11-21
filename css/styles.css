@@ -285,7 +285,7 @@ body::before {
 }
 
 .hero-description p {
-  font-size: 1.15rem;
+  font-size: clamp(1.15rem, 1.35vw, 1.28rem);
   max-width: none;
   margin: 0;
   color: var(--text-main);
@@ -295,7 +295,7 @@ body::before {
 }
 
 .hero-image {
-  min-height: 290px;
+  min-height: 250px;
   margin: 0;
   overflow: hidden;
   border-radius: 16px;
