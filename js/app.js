@@ -1,14 +1,24 @@
 document.addEventListener('DOMContentLoaded', () => {
-  let baseCeps = [];
+  // Município atendido pelo grupo (usado para garantir que só registros de Ubá/MG sejam exibidos)
+  const CIDADE_ALVO = 'Ubá';
+  const UF_ALVO = 'MG';
+  const MIN_CARACTERES = 3;
+  const MAX_SUGESTOES = 25;
 
-  // Elementos da Busca
+  let baseCeps = [];
+  let erroCarregamento = false;
+  let sugestoesAtuais = [];
+  let indiceAtivo = -1;
+
+  // Elementos da busca
   const inputBusca = document.getElementById('input-logradouro');
   const btnLimpar = document.getElementById('btn-limpar');
   const listaSugestoes = document.getElementById('lista-sugestoes');
   const hintBusca = document.getElementById('search-hint');
 
-  // Elementos do Resultado
-  const cardResultado = document.getElementById('resultado-cep');
+  // Elementos do resultado
+  const resultadoVazio = document.getElementById('result-empty');
+  const resultadoConteudo = document.getElementById('result-content');
   const resCep = document.getElementById('res-cep');
   const resLogradouro = document.getElementById('res-logradouro');
   const resBairro = document.getElementById('res-bairro');
@@ -16,20 +26,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const resLocalidade = document.getElementById('res-localidade');
   const resIbge = document.getElementById('res-ibge');
   const btnCopiarCep = document.getElementById('btn-copiar-cep');
+  const btnNovaBusca = document.getElementById('btn-nova-busca');
 
-  // 1. Carregamento assíncrono do JSON local via Fetch API
-  async function carregarBaseCeps() {
-    try {
-      const response = await fetch('./data/ceps.json');
-      if (!response.ok) {
-        throw new Error(`Erro HTTP ao carregar JSON: ${response.status}`);
-      }
-      baseCeps = await response.json();
-    } catch (erro) {
-      console.error('Falha ao carregar ./data/ceps.json:', erro);
-      hintBusca.innerHTML = '<strong>Aviso:</strong> Não foi possível carregar a base local de CEPs. Verifique se a página está rodando em um servidor web (Live Server, GitHub Pages ou Vercel).';
-    }
-  }
+  const TEXTO_HINT_INICIAL = `Digite pelo menos <strong>${MIN_CARACTERES} caracteres</strong> para ver sugestões.`;
+  const TEXTO_ERRO_BASE = '<strong>Aviso:</strong> não foi possível carregar a base local de CEPs. Abra a página por um servidor web (Live Server, GitHub Pages ou Vercel).';
 
   // Função utilitária para remover acentos e facilitar a busca
   function normalizarTexto(texto) {
@@ -40,21 +40,50 @@ document.addEventListener('DOMContentLoaded', () => {
       .trim();
   }
 
+  // 1. Carregamento assíncrono do JSON local via Fetch API
+  async function carregarBaseCeps() {
+    try {
+      const response = await fetch('./data/ceps.json');
+      if (!response.ok) {
+        throw new Error(`Erro HTTP ao carregar JSON: ${response.status}`);
+      }
+      const dados = await response.json();
+
+      // Filtro por cidade: a API ViaCEP faz busca parcial pelo nome do município
+      // ("Uba" também retorna Janaúba, Itajubá, Juatuba...), então mantemos apenas Ubá/MG.
+      const cidadeNorm = normalizarTexto(CIDADE_ALVO);
+      baseCeps = dados.filter((item) =>
+        normalizarTexto(item.localidade) === cidadeNorm &&
+        (item.uf || '').toUpperCase() === UF_ALVO
+      );
+    } catch (erro) {
+      console.error('Falha ao carregar ./data/ceps.json:', erro);
+      erroCarregamento = true;
+      hintBusca.innerHTML = TEXTO_ERRO_BASE;
+    }
+  }
+
   // 2. Renderizar sugestões no dropdown
   function exibirSugestoes(resultados) {
     listaSugestoes.innerHTML = '';
+    sugestoesAtuais = resultados.slice(0, MAX_SUGESTOES);
+    indiceAtivo = -1;
+    inputBusca.removeAttribute('aria-activedescendant');
 
-    if (resultados.length === 0) {
+    if (sugestoesAtuais.length === 0) {
       const liVazio = document.createElement('li');
       liVazio.className = 'suggestions-empty';
-      liVazio.textContent = 'Nenhum logradouro encontrado em Ubá com esse termo.';
+      liVazio.textContent = 'Nenhum logradouro de Ubá encontrado com esse termo.';
       listaSugestoes.appendChild(liVazio);
     } else {
-      // Limita a exibição a 25 itens para manter a UI leve e fluida
-      resultados.slice(0, 25).forEach((item) => {
+      sugestoesAtuais.forEach((item, indice) => {
         const li = document.createElement('li');
+        li.id = `sugestao-${indice}`;
         li.setAttribute('role', 'option');
-        li.tabIndex = 0;
+        li.setAttribute('aria-selected', 'false');
+        li.tabIndex = -1;
+
+        const textos = document.createElement('span');
 
         const spanRua = document.createElement('span');
         spanRua.className = 'suggestion-street';
@@ -62,22 +91,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const spanMeta = document.createElement('span');
         spanMeta.className = 'suggestion-meta';
-        const bairroTexto = item.bairro ? `Bairro: ${item.bairro}` : 'Bairro não especificado';
-        spanMeta.textContent = `${bairroTexto} • CEP: ${item.cep}`;
+        spanMeta.textContent = item.bairro || 'Bairro não especificado';
 
-        li.appendChild(spanRua);
-        li.appendChild(spanMeta);
+        textos.append(spanRua, spanMeta);
 
-        // Evento de clique ou Enter na sugestão
-        const selecionarItem = () => {
-          preencherResultado(item);
-          inputBusca.value = item.logradouro;
-          fecharSugestoes();
-        };
+        const spanCep = document.createElement('span');
+        spanCep.className = 'suggestion-cep';
+        spanCep.textContent = item.cep;
 
-        li.addEventListener('click', selecionarItem);
-        li.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter') selecionarItem();
+        li.append(textos, spanCep);
+
+        li.addEventListener('click', () => selecionarItem(item));
+        li.addEventListener('keydown', (evento) => {
+          if (evento.key === 'Enter') selecionarItem(item);
         });
 
         listaSugestoes.appendChild(li);
@@ -90,32 +116,98 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function fecharSugestoes() {
     listaSugestoes.hidden = true;
+    indiceAtivo = -1;
     inputBusca.setAttribute('aria-expanded', 'false');
+    inputBusca.removeAttribute('aria-activedescendant');
   }
 
-  // 3. Exibir detalhes completos com destaque no CEP
+  // Destaca a sugestão ativa ao navegar com as setas do teclado
+  function marcarSugestaoAtiva(novoIndice) {
+    const opcoes = listaSugestoes.querySelectorAll('[role="option"]');
+    if (opcoes.length === 0) return;
+
+    indiceAtivo = (novoIndice + opcoes.length) % opcoes.length;
+    opcoes.forEach((opcao, i) => {
+      opcao.setAttribute('aria-selected', String(i === indiceAtivo));
+    });
+
+    const ativa = opcoes[indiceAtivo];
+    inputBusca.setAttribute('aria-activedescendant', ativa.id);
+    ativa.scrollIntoView({ block: 'nearest' });
+  }
+
+  function selecionarItem(item) {
+    preencherResultado(item);
+    inputBusca.value = item.logradouro;
+    btnLimpar.hidden = false;
+    fecharSugestoes();
+  }
+
+  // 3. Exibir detalhes completos com destaque absoluto no CEP (um dígito por caixa)
+  function renderizarCep(cep) {
+    resCep.innerHTML = '';
+    const texto = cep || '';
+
+    // texto lido por leitores de tela (as caixinhas abaixo são só visuais)
+    const textoAcessivel = document.createElement('span');
+    textoAcessivel.className = 'sr-only';
+    textoAcessivel.textContent = texto || 'não informado';
+    resCep.appendChild(textoAcessivel);
+
+    [...texto].forEach((caractere, i) => {
+      const span = document.createElement('span');
+      span.setAttribute('aria-hidden', 'true');
+      if (caractere === '-') {
+        span.className = 'cep-dash';
+        span.textContent = '–';
+      } else {
+        span.className = 'cep-digit';
+        span.textContent = caractere;
+        span.style.animationDelay = `${i * 35}ms`;
+      }
+      resCep.appendChild(span);
+    });
+  }
+
   function preencherResultado(item) {
-    resCep.textContent = item.cep || 'Não informado';
+    renderizarCep(item.cep);
     resLogradouro.textContent = item.logradouro || '—';
-    resBairro.textContent = item.bairro || 'Centro / Não especificado';
+    resBairro.textContent = item.bairro || 'Não especificado';
     resComplemento.textContent = item.complemento || 'Sem complemento';
-    resLocalidade.textContent = `${item.localidade || 'Ubá'} / ${item.uf || 'MG'}`;
-    resIbge.textContent = `DDD (${item.ddd || '32'}) • IBGE: ${item.ibge || '3169901'}`;
+    resLocalidade.textContent = `${item.localidade || CIDADE_ALVO} / ${item.uf || UF_ALVO}`;
+    resIbge.textContent = `${item.ddd || '32'} · ${item.ibge || '3169901'}`;
 
-    btnCopiarCep.textContent = 'Copiar CEP';
-    cardResultado.hidden = false;
+    btnCopiarCep.dataset.cep = item.cep || '';
+    btnCopiarCep.lastChild.textContent = ' Copiar CEP';
+    resultadoVazio.hidden = true;
+    resultadoConteudo.hidden = false;
   }
 
-  // 4. Evento de digitação reativa (dispara somente com 3 ou mais letras)
+  function limparBusca() {
+    inputBusca.value = '';
+    btnLimpar.hidden = true;
+    fecharSugestoes();
+    resultadoConteudo.hidden = true;
+    resultadoVazio.hidden = false;
+    hintBusca.innerHTML = TEXTO_HINT_INICIAL;
+    inputBusca.focus();
+  }
+
+  // 4. Evento de digitação reativa (dispara somente com 3 ou mais caracteres)
   inputBusca.addEventListener('input', (evento) => {
     const termoBruto = evento.target.value;
     btnLimpar.hidden = termoBruto.length === 0;
 
     const termoNormalizado = normalizarTexto(termoBruto);
 
-    if (termoNormalizado.length < 3) {
+    if (erroCarregamento) {
+      hintBusca.innerHTML = TEXTO_ERRO_BASE;
+      return;
+    }
+
+    if (termoNormalizado.length < MIN_CARACTERES) {
       fecharSugestoes();
-      hintBusca.innerHTML = 'Digite pelo menos <strong>3 caracteres</strong> para exibir sugestões.';
+      hintBusca.innerHTML = TEXTO_HINT_INICIAL;
       return;
     }
 
@@ -129,17 +221,26 @@ document.addEventListener('DOMContentLoaded', () => {
     exibirSugestoes(filtrados);
   });
 
-  // Botão limpar campo
-  btnLimpar.addEventListener('click', () => {
-    inputBusca.value = '';
-    btnLimpar.hidden = true;
-    fecharSugestoes();
-    cardResultado.hidden = true;
-    hintBusca.innerHTML = 'Digite pelo menos <strong>3 caracteres</strong> para exibir sugestões.';
-    inputBusca.focus();
+  // Navegação do autocomplete pelo teclado (setas, Enter e Esc)
+  inputBusca.addEventListener('keydown', (evento) => {
+    if (listaSugestoes.hidden) return;
+
+    if (evento.key === 'ArrowDown') {
+      evento.preventDefault();
+      marcarSugestaoAtiva(indiceAtivo + 1);
+    } else if (evento.key === 'ArrowUp') {
+      evento.preventDefault();
+      marcarSugestaoAtiva(indiceAtivo - 1);
+    } else if (evento.key === 'Enter' && indiceAtivo >= 0) {
+      evento.preventDefault();
+      selecionarItem(sugestoesAtuais[indiceAtivo]);
+    }
   });
 
-  // Fechar dropdown ao clicar fora
+  btnLimpar.addEventListener('click', limparBusca);
+  btnNovaBusca.addEventListener('click', limparBusca);
+
+  // Fechar dropdown ao clicar fora da área de busca
   document.addEventListener('click', (evento) => {
     if (!evento.target.closest('.search-box')) {
       fecharSugestoes();
@@ -148,56 +249,202 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Botão de copiar CEP para a área de transferência
   btnCopiarCep.addEventListener('click', async () => {
-    const cepTexto = resCep.textContent;
+    const cepTexto = btnCopiarCep.dataset.cep;
     try {
       await navigator.clipboard.writeText(cepTexto);
-      btnCopiarCep.textContent = 'CEP Copiado!';
-      setTimeout(() => {
-        btnCopiarCep.textContent = 'Copiar CEP';
-      }, 2000);
+      btnCopiarCep.lastChild.textContent = ' CEP copiado!';
     } catch {
-      btnCopiarCep.textContent = 'Erro ao copiar';
+      btnCopiarCep.lastChild.textContent = ' Não foi possível copiar';
     }
+    setTimeout(() => {
+      btnCopiarCep.lastChild.textContent = ' Copiar CEP';
+    }, 2000);
   });
 
-  // 5. Controle dos Modais Flutuantes (Sobre, Termos, Privacidade)
-  const botoesAbrirModal = document.querySelectorAll('[data-modal]');
-  const botoesFecharModal = document.querySelectorAll('[data-close-modal]');
-  const overlaysModais = document.querySelectorAll('.modal-overlay');
-
-  botoesAbrirModal.forEach((botao) => {
-    botao.addEventListener('click', () => {
-      const idModal = botao.getAttribute('data-modal');
-      const modalAlvo = document.getElementById(idModal);
-      if (modalAlvo) {
-        modalAlvo.hidden = false;
-      }
+  // Links para #busca ("Encontrar CEP" e "Pular para a busca") levam o foco direto ao campo
+  document.querySelectorAll('a[href="#busca"]').forEach((link) => {
+    link.addEventListener('click', () => {
+      setTimeout(() => inputBusca.focus({ preventScroll: true }), 350);
     });
   });
 
-  botoesFecharModal.forEach((botao) => {
+  // 5. Controle dos Modais Flutuantes (Sobre, Termos, Privacidade)
+  const overlaysModais = document.querySelectorAll('.modal-overlay');
+  let elementoAntesDoModal = null;
+
+  function abrirModal(modal) {
+    elementoAntesDoModal = document.activeElement;
+    modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+    const botaoFechar = modal.querySelector('[data-close-modal]');
+    if (botaoFechar) botaoFechar.focus();
+  }
+
+  function fecharModal(modal) {
+    if (modal.hidden) return;
+    modal.hidden = true;
+    document.body.style.overflow = '';
+    if (elementoAntesDoModal) elementoAntesDoModal.focus();
+  }
+
+  document.querySelectorAll('[data-modal]').forEach((botao) => {
+    botao.addEventListener('click', () => {
+      const modalAlvo = document.getElementById(botao.getAttribute('data-modal'));
+      if (modalAlvo) abrirModal(modalAlvo);
+    });
+  });
+
+  document.querySelectorAll('[data-close-modal]').forEach((botao) => {
     botao.addEventListener('click', () => {
       const modalPai = botao.closest('.modal-overlay');
-      if (modalPai) modalPai.hidden = true;
+      if (modalPai) fecharModal(modalPai);
     });
   });
 
   overlaysModais.forEach((overlay) => {
+    // Clique no fundo escurecido fecha o modal
     overlay.addEventListener('click', (evento) => {
-      if (evento.target === overlay) {
-        overlay.hidden = true;
+      if (evento.target === overlay) fecharModal(overlay);
+    });
+
+    // Mantém o foco do teclado dentro do modal aberto
+    overlay.addEventListener('keydown', (evento) => {
+      if (evento.key !== 'Tab') return;
+      const focaveis = overlay.querySelectorAll('a[href], button:not([disabled])');
+      if (focaveis.length === 0) return;
+      const primeiro = focaveis[0];
+      const ultimo = focaveis[focaveis.length - 1];
+      if (evento.shiftKey && document.activeElement === primeiro) {
+        evento.preventDefault();
+        ultimo.focus();
+      } else if (!evento.shiftKey && document.activeElement === ultimo) {
+        evento.preventDefault();
+        primeiro.focus();
       }
     });
   });
 
   document.addEventListener('keydown', (evento) => {
     if (evento.key === 'Escape') {
-      overlaysModais.forEach((modal) => {
-        modal.hidden = true;
-      });
+      overlaysModais.forEach((modal) => fecharModal(modal));
       fecharSugestoes();
     }
   });
 
+  // 6. Carrossel de fotos do Hero (pilha de cartões-postais)
+  function iniciarCarrossel() {
+    const pilha = document.querySelector('[data-carousel]');
+    if (!pilha) return;
+
+    const fotos = [...pilha.querySelectorAll('[data-slide]')];
+    const botaoProxima = pilha.querySelector('.photo-stack-next');
+    if (fotos.length < 2) return;
+
+    const INTERVALO = 8000; // tempo que cada foto fica em destaque antes da troca
+    const DURACAO_SAIDA = 500;   // foto da frente sendo tirada da pilha (igual ao CSS .is-leaving)
+    const DURACAO_ENTRADA = 750; // fotos se reorganizando na pilha (igual ao transition do CSS)
+    const movimentoReduzido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let ordem = [...fotos];
+    let animando = false;
+    let temporizador = null;
+
+    function aplicarPosicoes() {
+      ordem.forEach((foto, posicao) => {
+        foto.dataset.pos = String(posicao);
+        foto.setAttribute('aria-hidden', String(posicao !== 0));
+      });
+    }
+
+    // Cartão sincronizado: mostra título e descrição da foto em destaque
+    const cartao = document.querySelector('[data-note]');
+    const cartaoTitulo = cartao ? cartao.querySelector('[data-note-titulo]') : null;
+    const cartaoTexto = cartao ? cartao.querySelector('[data-note-texto]') : null;
+    const DURACAO_CARTAO = 280; // igual ao transition do CSS .postcard-note.is-changing
+
+    function preencherCartao(foto) {
+      if (!cartao) return;
+      cartaoTitulo.textContent = foto.dataset.titulo || '';
+      cartaoTexto.textContent = foto.dataset.texto || '';
+    }
+
+    function trocarCartao(foto) {
+      if (!cartao) return;
+      if (movimentoReduzido) {
+        preencherCartao(foto);
+        return;
+      }
+      cartao.classList.add('is-changing');
+      setTimeout(() => {
+        preencherCartao(foto);
+        cartao.classList.remove('is-changing');
+      }, DURACAO_CARTAO);
+    }
+
+    function proximaFoto() {
+      if (animando) return;
+      animando = true;
+
+      const frente = ordem[0];
+      // 1º tempo: a foto da frente é "tirada" da pilha
+      frente.classList.add('is-leaving');
+      // o cartão "Lembranças de Ubá" troca junto, já com o texto da próxima foto
+      trocarCartao(ordem[1]);
+
+      setTimeout(() => {
+        // 2º tempo: ela vai para o fundo e as outras avançam uma posição
+        ordem = [...ordem.slice(1), frente];
+        aplicarPosicoes();
+        frente.classList.remove('is-leaving');
+        setTimeout(() => {
+          animando = false;
+          // a contagem dos 8 s só começa depois que a nova foto termina de chegar à frente
+          if (autoplayAtivo) agendarProxima();
+        }, movimentoReduzido ? 0 : DURACAO_ENTRADA);
+      }, movimentoReduzido ? 0 : DURACAO_SAIDA);
+    }
+
+    let autoplayAtivo = false;
+
+    function agendarProxima() {
+      clearTimeout(temporizador);
+      temporizador = setTimeout(proximaFoto, INTERVALO);
+    }
+
+    function iniciarAutoplay() {
+      if (movimentoReduzido || autoplayAtivo) return;
+      autoplayAtivo = true;
+      if (!animando) agendarProxima();
+    }
+
+    function pararAutoplay() {
+      autoplayAtivo = false;
+      clearTimeout(temporizador);
+      temporizador = null;
+    }
+
+    botaoProxima.addEventListener('click', () => {
+      // troca na hora; se a troca automática estiver ativa, os 8 s recomeçam ao fim da animação
+      clearTimeout(temporizador);
+      proximaFoto();
+    });
+
+    // Pausa enquanto o usuário está com o mouse ou o foco sobre as fotos
+    pilha.addEventListener('mouseenter', pararAutoplay);
+    pilha.addEventListener('mouseleave', iniciarAutoplay);
+    pilha.addEventListener('focusin', pararAutoplay);
+    pilha.addEventListener('focusout', iniciarAutoplay);
+
+    // Não gasta processamento com a aba em segundo plano
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) pararAutoplay();
+      else iniciarAutoplay();
+    });
+
+    aplicarPosicoes();
+    preencherCartao(ordem[0]);
+    iniciarAutoplay();
+  }
+
+  iniciarCarrossel();
   carregarBaseCeps();
 });
