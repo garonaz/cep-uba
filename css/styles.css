@@ -148,7 +148,12 @@ body::before {
 }
 
 .hero-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
   margin-bottom: 1.5rem;
+  text-align: left;
 }
 
 .badge-cidade {
@@ -160,7 +165,8 @@ body::before {
   font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 0.04em;
-  margin-bottom: 1.1rem;
+  margin-bottom: 0;
+  flex-shrink: 0;
   backdrop-filter: blur(8px);
 }
 
@@ -683,7 +689,10 @@ body::before {
   }
 
   .hero-heading {
+    flex-direction: column;
+    align-items: center;
     margin-bottom: 1.1rem;
+    text-align: center;
   }
 
   .hero h1 {
