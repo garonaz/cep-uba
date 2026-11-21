@@ -62,11 +62,10 @@ body::before {
    Header
    ========================================================================== */
 .site-header {
-  background:
-    linear-gradient(90deg, rgba(195, 210, 151, 0.28) 0%, #ffffff 38%, #f7f4ec 100%);
-  border-bottom: 3px solid var(--primary);
-  padding: 0.8rem 0;
-  box-shadow: 0 5px 20px rgba(58, 45, 25, 0.12);
+  background-color: var(--bg-card);
+  border-bottom: 1px solid rgba(58, 45, 25, 0.18);
+  padding: 0.9rem 0;
+  box-shadow: 0 4px 16px rgba(58, 45, 25, 0.1);
   position: relative;
   z-index: 20;
 }
@@ -80,22 +79,11 @@ body::before {
 .brand {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  min-width: 0;
-}
-
-.brand > a {
-  display: flex;
-  align-items: center;
-  background: #ffffff;
-  border: 1px solid rgba(58, 45, 25, 0.12);
-  border-radius: 12px;
-  padding: 0.38rem 0.55rem;
-  box-shadow: 0 4px 12px rgba(58, 45, 25, 0.08);
+  gap: 0.9rem;
 }
 
 .logo-si {
-  height: 48px;
+  height: 52px;
   width: auto;
   object-fit: contain;
   transition: transform 0.2s ease;
@@ -109,32 +97,18 @@ body::before {
 .brand-text {
   display: flex;
   flex-direction: column;
-  line-height: 1.25;
-}
-
-.brand-eyebrow {
-  color: #7c704f;
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-bottom: 0.12rem;
 }
 
 .brand-title {
   font-weight: 800;
-  font-size: 1.12rem;
+  font-size: 1.16rem;
   color: var(--primary);
   letter-spacing: -0.02em;
 }
 
-.brand-title strong {
-  color: #a82f34;
-  font-weight: 800;
-
 .brand-subtitle {
-  margin-top: 0.12rem;
-  font-size: 0.78rem;
+  margin-top: 0.08rem;
+  font-size: 0.82rem;
   color: #5f5444;
   font-weight: 600;
   text-decoration: none;
@@ -145,32 +119,6 @@ body::before {
 .brand-subtitle:focus-visible {
   color: var(--accent);
   text-decoration: underline;
-}
-
-.header-context {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-width: 78px;
-  margin-left: 1rem;
-  padding: 0.45rem 0.7rem;
-  border-left: 3px solid var(--accent);
-  color: var(--primary);
-  line-height: 1.05;
-}
-
-.header-context span {
-  font-size: 1.05rem;
-  font-weight: 900;
-  letter-spacing: 0.05em;
-}
-
-.header-context small {
-  margin-top: 0.22rem;
-  color: var(--text-muted);
-  font-size: 0.68rem;
-  font-weight: 700;
 }
 
 /* ==========================================================================
@@ -762,10 +710,6 @@ body::before {
 }
 
 @media (max-width: 639px) {
-  .header-context {
-    display: none;
-  }
-
   .team-bubbles {
     grid-template-columns: 1fr;
   }
