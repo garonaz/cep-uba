@@ -62,10 +62,11 @@ body::before {
    Header
    ========================================================================== */
 .site-header {
-  background-color: var(--bg-card);
-  border-bottom: 1px solid var(--border-color);
-  padding: 0.75rem 0;
-  box-shadow: 0 2px 16px rgba(58, 45, 25, 0.06);
+  background:
+    linear-gradient(90deg, #ffffff 0%, #fafbf6 100%);
+  border-bottom: 1px solid rgba(58, 45, 25, 0.22);
+  padding: 0.95rem 0;
+  box-shadow: 0 4px 18px rgba(58, 45, 25, 0.12);
   position: relative;
   z-index: 20;
 }
@@ -94,15 +95,16 @@ body::before {
 }
 
 .brand-title {
-  font-weight: 700;
-  font-size: 1.08rem;
+  font-weight: 800;
+  font-size: 1.16rem;
   color: var(--primary);
   letter-spacing: -0.02em;
 }
 
 .brand-subtitle {
-  font-size: 0.78rem;
-  color: var(--text-muted);
+  font-size: 0.82rem;
+  color: #5f5444;
+  font-weight: 600;
   text-decoration: none;
   width: fit-content;
 }
@@ -150,8 +152,8 @@ body::before {
 .hero-heading {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1.25rem;
+  justify-content: flex-start;
+  gap: 1rem;
   margin-bottom: 1.5rem;
   text-align: left;
 }
@@ -503,7 +505,8 @@ body::before {
   background:
     linear-gradient(135deg, rgba(58, 45, 25, 0.98), rgba(58, 45, 25, 0.92));
   color: #ffffff;
-  padding: 2rem 0;
+  border-top: 4px solid var(--accent-bg);
+  padding: 1.75rem 0 1.5rem;
   margin-top: auto;
 }
 
@@ -511,7 +514,7 @@ body::before {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.25rem;
+  gap: 1rem;
   text-align: center;
 }
 
@@ -529,7 +532,12 @@ body::before {
   background-color: #ffffff;
   padding: 4px 8px;
   border-radius: 6px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  transition: transform 0.2s ease;
+}
+
+.footer-logo:hover {
+  transform: translateY(-2px);
 }
 
 .footer-nav {
@@ -543,7 +551,7 @@ body::before {
   background: none;
   border: none;
   color: #ffffff;
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 600;
   text-decoration: underline;
   cursor: pointer;
@@ -555,8 +563,8 @@ body::before {
 }
 
 .footer-copy {
-  font-size: 0.82rem;
-  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.86);
 }
 
 /* Modais */
