@@ -3,130 +3,155 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Consulta rápida e interativa de logradouros e CEPs de Ubá - MG. Projeto acadêmico de Sistemas de Informação - UEMG Carangola.">
-  <title>Consulta de CEPs — Ubá, MG | Sistemas de Informação UEMG</title>
+  <meta name="description" content="Postal Ubá: consulta rápida e local de logradouros e CEPs de Ubá - MG. Projeto acadêmico de Sistemas de Informação - UEMG Carangola.">
+  <meta name="theme-color" content="#22489c">
+  <title>Postal Ubá — Consulta de CEPs de Ubá, MG</title>
+  <link rel="preload" href="./assets/fonts/dm-sans-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./assets/fonts/dm-serif-display.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="./css/styles.css">
 </head>
 <body>
 
-  <!-- Cabeçalho Institucional -->
+  <a class="skip-link" href="#busca">Pular para a busca</a>
+
+  <!-- Cabeçalho: identidade do curso de Sistemas de Informação -->
   <header class="site-header">
-    <div class="container header-content">
-      <div class="brand">
-        <a href="https://www.uemg.br/graduacao/cursos2/course/sistemas-de-informacao" target="_blank" rel="noopener noreferrer" title="Acessar o curso de Sistemas de Informação">
-          <img src="./assets/logo-si.png" alt="Logotipo do curso de Bacharelado em Sistemas de Informação" class="logo-si">
-        </a>
-        <div class="brand-text">
-          <span class="brand-eyebrow">Projeto acadêmico</span>
-          <span class="brand-title">Portal de CEPs <strong>• Ubá/MG</strong></span>
-          <a class="brand-subtitle" href="https://www.uemg.br/carangola" target="_blank" rel="noopener noreferrer" title="Abrir o site oficial da UEMG Unidade Carangola">
-            Sistemas de Informação — UEMG Carangola
-          </a>
-        </div>
-      </div>
-      <div class="header-context" aria-label="Curso de Sistemas de Informação">
-        <span class="header-context-label">UEMG</span>
-        <span class="header-context-period">2º período</span>
-      </div>
+    <div class="wrap head-row">
+      <a class="brand" href="#topo" aria-label="Postal Ubá — início">
+        <img src="./assets/logo-si.png" alt="Logotipo do curso de Bacharelado em Sistemas de Informação" class="logo-si" width="76" height="76">
+        <span class="brand-text">
+          <strong class="brand-title">Postal Ubá</strong>
+          <small class="brand-subtitle">Sistemas de Informação · UEMG Carangola</small>
+        </span>
+      </a>
+
+      <a href="#busca" class="head-cta" aria-label="Encontrar CEP">
+        <span aria-hidden="true">✉</span><span class="head-cta-text"> Encontrar CEP</span>
+      </a>
     </div>
+    <div class="airmail" aria-hidden="true"></div>
   </header>
 
-  <!-- Seção Hero com Imagem Representativa de Ubá -->
-  <section class="hero" aria-labelledby="hero-heading">
-    <div class="hero-overlay">
-      <div class="container hero-content">
-        <div class="hero-heading">
-          <h1 id="hero-heading">Encontre CEPs e Logradouros de Ubá</h1>
-          <span class="badge-cidade">Minas Gerais • Zona da Mata</span>
-        </div>
-        <div class="hero-bubble">
-          <div class="hero-description">
-            <span class="description-label">Sobre Ubá</span>
-            <p>Ubá é um município localizado na Zona da Mata de Minas Gerais, com aproximadamente 103 mil habitantes, segundo o Censo Demográfico de 2022. Conhecida nacionalmente como a Capital Nacional do Móvel, destaca-se pela forte presença da indústria moveleira, além dos setores de comércio, serviços e confecções. A cidade possui importância econômica e regional, atendendo também municípios vizinhos nas áreas de saúde, educação e comércio. Sua identidade cultural é marcada pelas tradições mineiras e pela famosa Manga Ubá, reconhecida como um dos símbolos locais.</p>
-          </div>
-          <figure class="hero-image">
-            <img src="./assets/hero-uba.png" alt="Vista representativa do município de Ubá">
+  <main id="topo">
+
+    <!-- Seção de Destaque (Hero) -->
+    <section class="hero wrap" aria-labelledby="hero-heading">
+      <div class="hero-text">
+        <p class="eyebrow">CEP · 36500 · Ubá — MG</p>
+        <h1 id="hero-heading">Toda carta começa com o <em>endereço certo.</em></h1>
+        <p class="hero-lead">Um catálogo de bolso das ruas, avenidas e praças de Ubá. Digite três letras e receba o CEP — sem selo, sem fila, sem cadastro.</p>
+      </div>
+
+      <div class="postcard">
+        <!-- Pilha de fotos (carrossel): a da frente "sai" e vai para o fundo -->
+        <div class="photo-stack" data-carousel role="region" aria-roledescription="carrossel" aria-label="Fotos de Ubá">
+          <figure class="postcard-photo" data-slide data-pos="0"
+            data-titulo="UEMG · Unidade Ubá"
+            data-texto="Campus da Universidade do Estado de Minas Gerais na cidade.">
+            <img src="./assets/hero-uba.jpg" alt="Fachada da unidade da UEMG em Ubá, com paredes azuis, vermelhas e brancas" width="1170" height="556">
           </figure>
+          <figure class="postcard-photo" data-slide data-pos="1" aria-hidden="true"
+            data-titulo="Estação Ferroviária"
+            data-texto="Patrimônio histórico da Praça Guido Marlière, inaugurado em 1879/1880 pela Estrada de Ferro Leopoldina.">
+            <img src="./assets/estacao-ferroviaria.jpg" alt="Antiga estação ferroviária de Ubá, prédio de tijolos com o nome da cidade na fachada" width="1000" height="636" loading="lazy">
+          </figure>
+          <figure class="postcard-photo" data-slide data-pos="2" aria-hidden="true"
+            data-titulo="Igreja do Rosário"
+            data-texto="De capela de pau a pique (1844) a templo neoclássico (1961), é patrimônio cultural de Ubá.">
+            <img src="./assets/igreja-rosario.jpg" alt="Igreja de Nossa Senhora do Rosário em Ubá, com duas torres brancas pontiagudas" width="550" height="412" loading="lazy">
+          </figure>
+          <figure class="postcard-photo" data-slide data-pos="3" aria-hidden="true"
+            data-titulo="Ary Barroso"
+            data-texto="Compositor de “Aquarela do Brasil”, nascido em Ubá em 1903.">
+            <img src="./assets/ary-barroso.jpg" alt="Fotografia antiga em preto e branco do compositor Ary Barroso diante de um microfone de rádio" width="660" height="472" loading="lazy">
+          </figure>
+          <button type="button" class="photo-stack-next" aria-label="Mostrar próxima foto"></button>
         </div>
+        <!-- Cartão sincronizado com a foto da frente (o texto é trocado pelo app.js) -->
+        <aside class="postcard-note" aria-label="Sobre a foto em destaque" data-note>
+          <p class="eyebrow">Lembranças de Ubá</p>
+          <p class="postcard-title" data-note-titulo>UEMG · Unidade Ubá</p>
+          <p class="postcard-text" data-note-texto>Campus da Universidade do Estado de Minas Gerais na cidade.</p>
+        </aside>
+        <img class="postmark" src="./assets/carimbo-uba.png" alt="" aria-hidden="true" width="130" height="130">
       </div>
-    </div>
-  </section>
-
-  <!-- Área Central de Busca e Exibição de Resultados -->
-  <main class="container main-content">
-    <section class="search-card" aria-labelledby="search-title">
-      <h2 id="search-title" class="sr-only">Pesquisar Logradouro em Ubá</h2>
-
-      <div class="search-box">
-        <label for="input-logradouro" class="search-label">
-          Digite o nome da Rua, Avenida ou Praça:
-        </label>
-        <div class="input-wrapper">
-          <input
-            type="search"
-            id="input-logradouro"
-            name="logradouro"
-            placeholder="Ex.: Avenida Raul Soares, Rua São José... (mín. 3 letras)"
-            autocomplete="off"
-            aria-autocomplete="list"
-            aria-controls="lista-sugestoes"
-            aria-expanded="false"
-          >
-          <button type="button" id="btn-limpar" class="btn-clear" aria-label="Limpar busca" hidden>&times;</button>
-        </div>
-        <p id="search-hint" class="search-hint">Digite pelo menos <strong>3 caracteres</strong> para exibir sugestões.</p>
-
-        <!-- Menu Dropdown / Autocomplete -->
-        <ul id="lista-sugestoes" class="suggestions-list" role="listbox" hidden></ul>
-      </div>
-
-      <!-- Card de Resultado com Destaque Absoluto no CEP -->
-      <article id="resultado-cep" class="result-card" aria-live="polite" hidden>
-        <div class="result-header">
-          <span class="result-tag">Endereço Localizado</span>
-          <button type="button" id="btn-copiar-cep" class="btn-copy">Copiar CEP</button>
-        </div>
-
-        <div class="cep-highlight-box">
-          <span class="cep-label">CEP OFICIAL</span>
-          <strong id="res-cep" class="cep-value">00000-000</strong>
-        </div>
-
-        <dl class="result-details">
-          <div class="detail-item">
-            <dt>Logradouro</dt>
-            <dd id="res-logradouro">—</dd>
-          </div>
-          <div class="detail-item">
-            <dt>Bairro</dt>
-            <dd id="res-bairro">—</dd>
-          </div>
-          <div class="detail-item">
-            <dt>Complemento</dt>
-            <dd id="res-complemento">—</dd>
-          </div>
-          <div class="detail-item">
-            <dt>Município / UF</dt>
-            <dd id="res-localidade">Ubá / MG</dd>
-          </div>
-          <div class="detail-item">
-            <dt>DDD / Código IBGE</dt>
-            <dd id="res-ibge">—</dd>
-          </div>
-        </dl>
-      </article>
     </section>
+
+    <!-- Área Central de Busca e Exibição de Resultados -->
+    <section id="busca" class="wrap search-section" aria-labelledby="search-title">
+      <h2 id="search-title" class="sr-only">Pesquisar logradouro em Ubá</h2>
+
+      <div class="envelope">
+        <div class="airmail" aria-hidden="true"></div>
+        <div class="envelope-inner">
+
+          <div class="envelope-search search-box">
+            <label for="input-logradouro" class="field-label">Destinatário · Logradouro</label>
+            <div class="input-wrapper">
+              <input
+                type="search"
+                id="input-logradouro"
+                name="logradouro"
+                placeholder="Rua, avenida ou praça…"
+                autocomplete="off"
+                role="combobox"
+                aria-autocomplete="list"
+                aria-controls="lista-sugestoes"
+                aria-expanded="false"
+                aria-describedby="search-hint"
+              >
+              <button type="button" id="btn-limpar" class="btn-clear" aria-label="Limpar busca" hidden>&times;</button>
+            </div>
+            <p id="search-hint" class="search-hint" aria-live="polite">Digite pelo menos <strong>3 caracteres</strong> para ver sugestões.</p>
+
+            <!-- Menu Dropdown / Autocomplete -->
+            <ul id="lista-sugestoes" class="suggestions-list" role="listbox" aria-label="Logradouros encontrados" hidden></ul>
+          </div>
+
+          <!-- Resultado com destaque absoluto no CEP -->
+          <article class="envelope-result" aria-live="polite" aria-labelledby="result-title">
+            <div class="stamp" aria-hidden="true">Ubá<br>MG</div>
+            <h3 id="result-title" class="field-label">Endereço localizado</h3>
+
+            <p id="result-empty" class="result-empty">
+              Escolha um logradouro na lista para ver o endereço completo e o CEP.
+            </p>
+
+            <div id="result-content" hidden>
+              <dl class="result-lines">
+                <div><dt>Logradouro</dt><dd id="res-logradouro">—</dd></div>
+                <div><dt>Bairro</dt><dd id="res-bairro">—</dd></div>
+                <div><dt>Complemento</dt><dd id="res-complemento">—</dd></div>
+                <div><dt>Cidade/UF</dt><dd id="res-localidade">Ubá / MG</dd></div>
+                <div><dt>DDD · IBGE</dt><dd id="res-ibge">—</dd></div>
+              </dl>
+
+              <p class="field-label cep-label">CEP</p>
+              <strong id="res-cep" class="cep-digits"></strong>
+
+              <div class="result-actions">
+                <button type="button" id="btn-copiar-cep" class="btn btn-primary"><span aria-hidden="true">⧉</span> Copiar CEP</button>
+                <button type="button" id="btn-nova-busca" class="btn btn-ghost">Nova busca</button>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
   </main>
 
-  <!-- Rodapé Institucional e Modais -->
+  <!-- Rodapé -->
   <footer class="site-footer">
-    <div class="container footer-grid">
+    <div class="airmail" aria-hidden="true"></div>
+    <div class="wrap footer-grid">
       <div class="footer-logos">
-        <a href="https://www.uemg.br/graduacao/cursos2/course/sistemas-de-informacao" target="_blank" rel="noopener noreferrer" title="Acessar o curso de Sistemas de Informação">
-          <img src="./assets/logo-si.png" alt="Logo Sistemas de Informação" class="footer-logo">
+        <a href="https://www.uemg.br/graduacao/cursos2/course/sistemas-de-informacao" target="_blank" rel="noopener noreferrer" title="Conhecer o curso de Sistemas de Informação da UEMG" class="footer-logo-link">
+          <img src="./assets/logo-si.png" alt="Logo Sistemas de Informação" class="footer-logo" width="56" height="56">
         </a>
-        <a href="https://www.uemg.br/carangola" target="_blank" rel="noopener noreferrer" title="Acessar site oficial da UEMG Unidade Carangola">
-          <img src="./assets/logo-uemg.png" alt="Logo UEMG Unidade Carangola" class="footer-logo">
+        <a href="https://www.uemg.br/carangola" target="_blank" rel="noopener noreferrer" title="Acessar site oficial da UEMG Unidade Carangola" class="footer-logo-link">
+          <img src="./assets/logo-uemg.png" alt="Logo UEMG Unidade Carangola" class="footer-logo footer-logo-uemg" width="56" height="56">
         </a>
       </div>
 
@@ -136,15 +161,13 @@
         <button type="button" class="footer-link" data-modal="modal-privacidade">Privacidade</button>
       </nav>
 
-      <p class="footer-copy">
-        &copy; 2026 — Desenvolvido por <strong>Danielly Dodó</strong>, <strong>Luciano Rocha</strong>, <strong>Maria Eduarda</strong> e <strong>Mateus Garona</strong> • UEMG Unidade Carangola (2º Período - Sistemas de Informação).
-      </p>
+      <p class="footer-copy">&copy; 2026 — Postal Ubá · Projeto acadêmico de Sistemas de Informação, UEMG Carangola (2º Período).</p>
     </div>
   </footer>
 
   <!-- MODAL 1: SOBRE -->
   <div id="modal-sobre" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="titulo-sobre" hidden>
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog--wide">
       <header class="modal-header">
         <h2 id="titulo-sobre">Sobre o Projeto</h2>
         <button type="button" class="modal-close" data-close-modal aria-label="Fechar janela">&times;</button>
@@ -157,15 +180,120 @@
           Unidade Acadêmica de Carangola (turma do 2º Período), com foco na consulta offline/local de logradouros
           do município de <strong>Ubá - MG</strong>.
         </p>
-        <p>
-          <strong>Equipe de Desenvolvimento:</strong>
-        </p>
-        <div class="team-bubbles" aria-label="Autores do projeto">
-          <a class="team-bubble" href="https://github.com/" target="_blank" rel="noopener noreferrer">Danielly Dodó</a>
-          <a class="team-bubble" href="https://github.com/" target="_blank" rel="noopener noreferrer">Luciano Rocha</a>
-          <a class="team-bubble" href="https://github.com/" target="_blank" rel="noopener noreferrer">Maria Eduarda</a>
-          <a class="team-bubble" href="https://github.com/" target="_blank" rel="noopener noreferrer">Mateus Garona</a>
+        <section class="team" aria-labelledby="team-title">
+          <h3 id="team-title" class="team-title">Equipe de Desenvolvimento</h3>
+        <div class="team-grid">
+          <article class="student-profile-card">
+            <header class="student-profile-header">
+              <img class="student-profile-photo" src="./assets/equipe/maria.png" alt="Foto de Maria Eduarda Hernandes" />
+              <div>
+                <h4 class="student-profile-name">Maria Eduarda</h4>
+                <p class="student-profile-location">Carangola, Minas Gerais</p>
+              </div>
+            </header>
+            <div class="student-profile-details">
+              <div class="student-profile-details-inner">
+                <p class="student-profile-skills">UX/UI | Fullstack em formação | Dev | Python | JavaScript</p>
+                <p class="student-profile-bio">Estudante e estagiária em Sistemas de Informação, interessada em desenvolvimento web, tecnologia e comunidades de mulheres na área.</p>
+                <nav class="student-profile-links" aria-label="Perfis de Maria Eduarda">
+                  <a class="student-profile-link student-profile-link--linkedin" href="https://www.linkedin.com/in/maria-eduarda-hernandes-456459366/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.26 2.37 4.26 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0Z" />
+                    </svg>
+                  </a>
+                  <a class="student-profile-link student-profile-link--github" href="https://github.com/mariahernands" target="_blank" rel="noopener noreferrer" aria-label="GitHub" title="GitHub">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 .9a11.1 11.1 0 0 0-3.51 21.63c.56.1.76-.24.76-.54v-2.1c-3.1.67-3.76-1.32-3.76-1.32-.5-1.28-1.24-1.62-1.24-1.62-1.02-.7.08-.69.08-.69 1.13.08 1.73 1.16 1.73 1.16 1 .1.5 2.62 3.26 1.86.1-.73.39-1.23.7-1.51-2.48-.28-5.09-1.24-5.09-5.53 0-1.22.44-2.21 1.16-2.99-.12-.28-.5-1.42.11-2.95 0 0 .95-.3 3.05 1.14a10.6 10.6 0 0 1 5.55 0c2.1-1.43 3.05-1.14 3.05-1.14.61 1.53.23 2.67.11 2.95.72.78 1.16 1.77 1.16 2.99 0 4.3-2.61 5.25-5.1 5.52.4.35.76 1.03.76 2.08v3.08c0 .3.2.65.77.54A11.1 11.1 0 0 0 12 .9Z" />
+                    </svg>
+                  </a>
+                </nav>
+              </div>
+            </div>
+          </article>
+          <article class="student-profile-card">
+            <header class="student-profile-header">
+              <img class="student-profile-photo" src="./assets/equipe/luciano.png" alt="Foto de Luciano Rocha Padilha Porto" />
+              <div>
+                <h4 class="student-profile-name">Luciano Rocha</h4>
+                <p class="student-profile-location">Carangola, Minas Gerais</p>
+              </div>
+            </header>
+            <div class="student-profile-details">
+              <div class="student-profile-details-inner">
+                <p class="student-profile-skills">Python | SQL | Backend | Automação | Excel</p>
+                <p class="student-profile-bio">Estagiário e estudante de Sistemas de Informação (UEMG) e Segurança da Informação (UniRitter), com interesse em tecnologia, automação e desenvolvimento de soluções.</p>
+                <nav class="student-profile-links" aria-label="Perfis de Luciano Rocha">
+                  <a class="student-profile-link student-profile-link--linkedin" href="https://www.linkedin.com/in/luciano-rocha31/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.26 2.37 4.26 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0Z" />
+                    </svg>
+                  </a>
+                  <a class="student-profile-link student-profile-link--github" href="https://github.com/l1wba" target="_blank" rel="noopener noreferrer" aria-label="GitHub" title="GitHub">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 .9a11.1 11.1 0 0 0-3.51 21.63c.56.1.76-.24.76-.54v-2.1c-3.1.67-3.76-1.32-3.76-1.32-.5-1.28-1.24-1.62-1.24-1.62-1.02-.7.08-.69.08-.69 1.13.08 1.73 1.16 1.73 1.16 1 .1.5 2.62 3.26 1.86.1-.73.39-1.23.7-1.51-2.48-.28-5.09-1.24-5.09-5.53 0-1.22.44-2.21 1.16-2.99-.12-.28-.5-1.42.11-2.95 0 0 .95-.3 3.05 1.14a10.6 10.6 0 0 1 5.55 0c2.1-1.43 3.05-1.14 3.05-1.14.61 1.53.23 2.67.11 2.95.72.78 1.16 1.77 1.16 2.99 0 4.3-2.61 5.25-5.1 5.52.4.35.76 1.03.76 2.08v3.08c0 .3.2.65.77.54A11.1 11.1 0 0 0 12 .9Z" />
+                    </svg>
+                  </a>
+                </nav>
+              </div>
+            </div>
+          </article>
+          <article class="student-profile-card">
+            <header class="student-profile-header">
+              <img class="student-profile-photo" src="./assets/equipe/danielly.png" alt="Foto de Danielly Dodó" />
+              <div>
+                <h4 class="student-profile-name">Danielly Dodó</h4>
+                <p class="student-profile-location">Carangola, Minas Gerais</p>
+              </div>
+            </header>
+            <div class="student-profile-details">
+              <div class="student-profile-details-inner">
+                <p class="student-profile-skills">Desenvolvimento Front-end | UI/UX Design | Sistemas de Informação | Em formação</p>
+                <p class="student-profile-bio">Estudante de Sistemas de Informação (UEMG), com experiência administrativa e interesse em Design Gráfico e UX/UI.</p>
+                <nav class="student-profile-links" aria-label="Perfis de Danielly Dodó">
+                  <a class="student-profile-link student-profile-link--linkedin" href="https://www.linkedin.com/in/danielly-dod%C3%B3-aa5b5a336/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.26 2.37 4.26 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0Z" />
+                    </svg>
+                  </a>
+                  <a class="student-profile-link student-profile-link--github" href="https://github.com/daniellydodo" target="_blank" rel="noopener noreferrer" aria-label="GitHub" title="GitHub">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 .9a11.1 11.1 0 0 0-3.51 21.63c.56.1.76-.24.76-.54v-2.1c-3.1.67-3.76-1.32-3.76-1.32-.5-1.28-1.24-1.62-1.24-1.62-1.02-.7.08-.69.08-.69 1.13.08 1.73 1.16 1.73 1.16 1 .1.5 2.62 3.26 1.86.1-.73.39-1.23.7-1.51-2.48-.28-5.09-1.24-5.09-5.53 0-1.22.44-2.21 1.16-2.99-.12-.28-.5-1.42.11-2.95 0 0 .95-.3 3.05 1.14a10.6 10.6 0 0 1 5.55 0c2.1-1.43 3.05-1.14 3.05-1.14.61 1.53.23 2.67.11 2.95.72.78 1.16 1.77 1.16 2.99 0 4.3-2.61 5.25-5.1 5.52.4.35.76 1.03.76 2.08v3.08c0 .3.2.65.77.54A11.1 11.1 0 0 0 12 .9Z" />
+                    </svg>
+                  </a>
+                </nav>
+              </div>
+            </div>
+          </article>
+          <article class="student-profile-card">
+            <header class="student-profile-header">
+              <img class="student-profile-photo" src="./assets/equipe/mateus.png" alt="Foto de Mateus Garona" />
+              <div>
+                <h4 class="student-profile-name">Mateus Garona</h4>
+                <p class="student-profile-location">Porciúncula, Rio de Janeiro</p>
+              </div>
+            </header>
+            <div class="student-profile-details">
+              <div class="student-profile-details-inner">
+                <p class="student-profile-skills">Backend | Desenvolvimento Fullstack | Banco de Dados | Segurança da Informação</p>
+                <p class="student-profile-bio">Técnico e graduado em Química pelo IFF e estudante de Sistemas de Informação na UEMG, com experiência em pesquisa sobre sustentabilidade. Tem interesse em desenvolver aplicações completas, organizar dados e proteger sistemas.</p>
+                <nav class="student-profile-links" aria-label="Perfis de Mateus Garona">
+                  <a class="student-profile-link student-profile-link--linkedin" href="https://www.linkedin.com/in/mateus-garona-314956232/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.26 2.37 4.26 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0Z" />
+                    </svg>
+                  </a>
+                  <a class="student-profile-link student-profile-link--github" href="https://github.com/garonaz" target="_blank" rel="noopener noreferrer" aria-label="GitHub" title="GitHub">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 .9a11.1 11.1 0 0 0-3.51 21.63c.56.1.76-.24.76-.54v-2.1c-3.1.67-3.76-1.32-3.76-1.32-.5-1.28-1.24-1.62-1.24-1.62-1.02-.7.08-.69.08-.69 1.13.08 1.73 1.16 1.73 1.16 1 .1.5 2.62 3.26 1.86.1-.73.39-1.23.7-1.51-2.48-.28-5.09-1.24-5.09-5.53 0-1.22.44-2.21 1.16-2.99-.12-.28-.5-1.42.11-2.95 0 0 .95-.3 3.05 1.14a10.6 10.6 0 0 1 5.55 0c2.1-1.43 3.05-1.14 3.05-1.14.61 1.53.23 2.67.11 2.95.72.78 1.16 1.77 1.16 2.99 0 4.3-2.61 5.25-5.1 5.52.4.35.76 1.03.76 2.08v3.08c0 .3.2.65.77.54A11.1 11.1 0 0 0 12 .9Z" />
+                    </svg>
+                  </a>
+                </nav>
+              </div>
+            </div>
+          </article>
         </div>
+        </section>
+
         <div class="ai-transparency-box">
           <p>
             <strong>Nota de Transparência sobre o Uso de IA:</strong> Em consonância com os princípios de
@@ -176,6 +304,7 @@
             lógica de negócios e validação final concebidas e auditadas pelos membros da equipe.
           </p>
         </div>
+
       </div>
     </div>
   </div>
